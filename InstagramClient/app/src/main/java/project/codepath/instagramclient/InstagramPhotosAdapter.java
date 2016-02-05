@@ -28,15 +28,21 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
         InstagramPhoto photo = getItem(position);
 
         if(convertView==null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_photo, parent, false);
+            //convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_photo, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_photo_beautiful, parent, false);
 
 
         }
 
-        TextView tvCaption = (TextView)convertView.findViewById(R.id.tvCaption);
-        ImageView ivPhoto = (ImageView)convertView.findViewById(R.id.ivPhoto);
+        TextView tvCaption = (TextView)convertView.findViewById(R.id.tvCaptionBeautiful);
+        ImageView ivPhoto = (ImageView)convertView.findViewById(R.id.ivPhotoBeautiful);
         tvCaption.setText(photo.caption);
         ivPhoto.setImageResource(0);
+
+        /*TextView tvCaption = (TextView)convertView.findViewById(R.id.tvCaption);
+        ImageView ivPhoto = (ImageView)convertView.findViewById(R.id.ivPhoto);
+        tvCaption.setText(photo.caption);
+        ivPhoto.setImageResource(0);*/
         //Picasso.with(getContext()).load(photo.imageURL).into(ivPhoto);
 
         Picasso.with(getContext()).load(photo.imageURL).fit().centerCrop().placeholder(R.mipmap.ic_launcher).into(ivPhoto);
