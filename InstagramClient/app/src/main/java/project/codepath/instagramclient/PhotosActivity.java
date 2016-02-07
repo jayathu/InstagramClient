@@ -98,7 +98,7 @@ public class PhotosActivity extends AppCompatActivity {
 
 
         lvPhotos.setAdapter(aPhotos);
-        fetchPopularPhotos();
+        fetchTimelineAsync();
 
 
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -107,7 +107,7 @@ public class PhotosActivity extends AppCompatActivity {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchTimelineAsync(0);
+                fetchTimelineAsync();
             }
         });
 
@@ -124,7 +124,7 @@ public class PhotosActivity extends AppCompatActivity {
 
     String url = "https://api.instagram.com/v1/media/popular?client_id=" + CLIENT_ID;
 
-    public void fetchTimelineAsync(int page) {
+    public void fetchTimelineAsync() {
         AsyncHttpClient client = new AsyncHttpClient();
 
         client.get(url, null, new JsonHttpResponseHandler() {
@@ -133,7 +133,6 @@ public class PhotosActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
 
-                //Log.i("DEBUG", response.toString());
 
                 // Remember to CLEAR OUT old items before appending in the new ones
                 aPhotos.clear();
@@ -146,7 +145,12 @@ public class PhotosActivity extends AppCompatActivity {
                         InstagramPhoto photo = new InstagramPhoto();
                         photo.comments = new ArrayList<>();
                         photo.username = photoJSON.getJSONObject("user").getString("username");
-                        photo.caption = photoJSON.getJSONObject("caption").getString("text");
+
+                        if (photoJSON.getJSONObject("caption") != null) {
+                            photo.caption = photoJSON.getJSONObject("caption").getString("text");
+                        }
+
+
                         photo.imageURL = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getString("url");
                         photo.likesCount = photoJSON.getJSONObject("likes").getInt("count");
                         photo.imageHeight = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getInt("height");
@@ -155,31 +159,31 @@ public class PhotosActivity extends AppCompatActivity {
                         photo.profilePicURL = photoJSON.getJSONObject("user").getString("profile_picture");
 
                         photo.created_time = photoJSON.getLong("created_time");
-                        JSONObject commentsJSON = photoJSON.getJSONObject("comments");
-                        JSONArray comments = null;
+
+                        if (photoJSON.getJSONObject("comments") != null) {
+                            JSONObject commentsJSON = photoJSON.getJSONObject("comments");
+                            JSONArray comments = null;
 
 
+                            try {
+                                comments = commentsJSON.getJSONArray("data");
+                                for (int j = 0; j < comments.length(); j++) {
 
-                        try{
-                            comments = commentsJSON.getJSONArray("data");
-                            for(int j = 0; j < comments.length(); j++) {
+                                    JSONObject commentJSON = comments.getJSONObject(j);
+                                    InstagramComment comment = new InstagramComment();
 
-                                JSONObject commentJSON = comments.getJSONObject(j);
-                                InstagramComment comment = new InstagramComment();
+                                    comment.comment = commentJSON.getString("text");
+                                    comment.commentedBy = commentJSON.getJSONObject("from").getString("full_name");
+                                    comment.commenterProfilePicUrl = commentJSON.getJSONObject("from").getString("profile_picture");
+                                    photo.comments.add(comment);
 
-                                comment.comment = commentJSON.getString("text");
-                                comment.commentedBy = commentJSON.getJSONObject("from").getString("full_name");
-                                comment.commenterProfilePicUrl = commentJSON.getJSONObject("from").getString("profile_picture");
-                                photo.comments.add(comment);
 
-                                Log.i("COMMENT", "COMMENT :: " + comment.comment);
-
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                        }catch (JSONException e){
-                            Log.i("EXCEPTION", "EXCEPTION");
-                            e.printStackTrace();
+                            photos.add(photo);
                         }
-                        photos.add(photo);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -195,50 +199,6 @@ public class PhotosActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
-            }
-        });
-    }
-
-    public void fetchPopularPhotos() {
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        client.get(url, null, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-
-                //Log.i("DEBUG", response.toString());
-
-                JSONArray photosJSON = null;
-                try {
-                    photosJSON = response.getJSONArray("data");
-                    for (int i = 0; i < photosJSON.length(); i++) {
-                        JSONObject photoJSON = photosJSON.getJSONObject(i);
-                        //decode the attributes of the json into datamodel
-                        InstagramPhoto photo = new InstagramPhoto();
-                        photo.username = photoJSON.getJSONObject("user").getString("username");
-                        photo.caption = photoJSON.getJSONObject("caption").getString("text");
-                        photo.imageURL = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getString("url");
-                        photo.likesCount = photoJSON.getJSONObject("likes").getInt("count");
-                        photo.imageHeight = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getInt("height");
-
-                        photos.add(photo);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-
-                }
-
-                aPhotos.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-
-               // Log.d("DEBUG", "Fetch timeline error: " + e.toString());
 
             }
         });
