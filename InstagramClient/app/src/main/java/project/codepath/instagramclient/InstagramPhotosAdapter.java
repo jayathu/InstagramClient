@@ -1,7 +1,7 @@
 package project.codepath.instagramclient;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.makeramen.roundedimageview.RoundedTransformationBuilder;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -50,34 +47,37 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
         tvCaption.setText(photo.caption);
         tvFullname.setText(photo.fullName);
         ivPhoto.setImageResource(0);
+        TextView tvPostedSince = (TextView)convertView.findViewById(R.id.tvPostedSince);
 
-        /*
-        com.squareup.picasso.Transformation transformation = new RoundedTransformationBuilder()
-                                        .borderColor(Color.BLACK)
-                                        .borderWidthDp(3)
-                                        .cornerRadiusDp(30)
-                                        .oval(false)
-                                        .build();
+        CharSequence val = DateUtils.getRelativeTimeSpanString(photo.created_time * 1000, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+        tvPostedSince.setText(val);
 
-        ImageView iv_profile_pic = (ImageView)convertView.findViewById(R.id.iv_profile_pic);
-        Picasso.with(getContext())
-                .load(photo.imageURL)
-                .fit()
-                .transform(transformation)
-                .into(iv_profile_pic);
+        if(photo.comments != null && photo.comments.size() > 1) {
 
-                */
-        /*TextView tvCaption = (TextView)convertView.findViewById(R.id.tvCaption);
-        ImageView ivPhoto = (ImageView)convertView.findViewById(R.id.ivPhoto);
-        tvCaption.setText(photo.caption);
-        ivPhoto.setImageResource(0);*/
-        //Picasso.with(getContext()).load(photo.imageURL).into(ivPhoto);
+            TextView tvCommentedBy = (TextView) convertView.findViewById(R.id.tvCommentByUser);
+            TextView tvComment = (TextView) convertView.findViewById(R.id.tvComment);
 
-        Picasso.with(getContext()).load(photo.imageURL).fit().centerCrop().placeholder(R.mipmap.ic_launcher).into(ivPhoto);
+            TextView tvCommentsCount = (TextView)convertView.findViewById(R.id.tvCommentsCount);
 
-        Picasso.with(getContext()).load(photo.profilePicURL).fit().centerCrop().placeholder(R.mipmap.ic_launcher).into(ivProfilePhoto);
+            tvCommentedBy.setText(photo.comments.get(0).commentedBy);
+            tvComment.setText(photo.comments.get(0).comment);
+
+            tvCommentsCount.setText(photo.comments.size() + " Comments");
+
+            TextView tvCommented2By = (TextView) convertView.findViewById(R.id.tvComment2ByUser);
+            TextView tvComment2 = (TextView) convertView.findViewById(R.id.tv2Comment);
+            tvCommented2By.setText(photo.comments.get(1).commentedBy);
+            tvComment2.setText(photo.comments.get(1).comment);
+
+        }
+
+        Picasso.with(getContext()).load(photo.imageURL).fit().centerInside().placeholder(R.drawable.placeholder1).into(ivPhoto);
+
+
+        Picasso.with(getContext()).load(photo.profilePicURL).fit().centerCrop().placeholder(R.drawable.placeholderwoman).into(ivProfilePhoto);
 
         return convertView;
 
     }
+
 }

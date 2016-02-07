@@ -1,5 +1,7 @@
 package project.codepath.instagramclient;
 
+import java.util.ArrayList;
+
 /**
  * Created by jnagaraj on 2/2/16.
  */
@@ -12,4 +14,7 @@ public class InstagramPhoto {
     public int likesCount;
     public String fullName;
     public String profilePicURL;
+    public long created_time;
+
+    public ArrayList<InstagramComment> comments;
 }
