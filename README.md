@@ -37,6 +37,18 @@ The following **additional** features are implemented:
 - [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
 - [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
 
+## Video Walkthrough 
+
+Here's a walkthrough of implemented user stories:
+
+<img src='http://imgur.com/bMrXUEp.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
+
+## Notes
+
+Describe any challenges encountered while building the app.
+
 ## License
 
     Copyright [2016] [Jayashree Nagarajan]
