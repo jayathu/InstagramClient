@@ -37,4 +37,7 @@ dependencies {
     compile 'com.loopj.android:android-async-http:1.4.9'
     //load remote images from the server into the views
     compile 'com.squareup.picasso:picasso:2.5.2'
+
+    //Butterknife for view lookups
+    compile 'com.jakewharton:butterknife:7.0.1'
 }

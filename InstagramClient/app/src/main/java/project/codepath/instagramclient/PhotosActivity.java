@@ -20,7 +20,10 @@ import org.json.JSONObject;
 import org.w3c.dom.Comment;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 public class PhotosActivity extends AppCompatActivity {
@@ -29,79 +32,26 @@ public class PhotosActivity extends AppCompatActivity {
 
     private ArrayList<InstagramPhoto> photos;
     private InstagramPhotosAdapter aPhotos;
-    private SwipeRefreshLayout swipeContainer;
 
+    @Bind(R.id.lvPhotos)ListView lvPhotos;
+    @Bind(R.id.swipeContainer)SwipeRefreshLayout swipeContainer;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photos);
+        ButterKnife.bind(this);
 
         //SEND OUT API REQUEST TO POPULAR PHOTOS
         photos = new ArrayList<>();
 
         aPhotos = new InstagramPhotosAdapter(this, photos);
 
-        ListView lvPhotos = (ListView)findViewById(R.id.lvPhotos);
-
-        /*
-
-        lvPhotos.setOnScrollListener(new AbsListView.OnScrollListener() {
-
-            int mScrollState = AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
-
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-
-                mScrollState = scrollState;
-
-            }
-
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstItem, int visibleCount, int totalCount) {
-
-                if(mScrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE)
-                    return;
-
-                for(int i = 0; i < visibleCount; i++) {
-                    View listItem = absListView.getChildAt(i);
-                    if(listItem == null)
-                        break;
-
-                    LinearLayout layout = (LinearLayout)findViewById(R.id.llTopBar);
-
-                    int topMargin = 0;
-                    if (i == 0) {
-                        int top = listItem.getTop();
-                        int height = listItem.getHeight();
-
-                        // if top is negative, the list item has scrolled up.
-                        // if the title view falls within the container's visible portion,
-                        //     set the top margin to be the (inverse) scrolled amount of the container.
-                        // else
-                        //     set the top margin to be the difference between the heights.
-                        if (top < 0)
-                            topMargin = layout.getHeight() < (top + height) ? -top : (height - layout.getHeight());
-                    }
-
-                    // set the margin.
-                    ((ViewGroup.MarginLayoutParams) layout.getLayoutParams()).topMargin = topMargin;
-
-                    // request Android to layout again.
-                    listItem.requestLayout();
-                }
-
-            }
-        });*/
-
-
         lvPhotos.setAdapter(aPhotos);
         fetchTimelineAsync();
 
 
-        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         // Setup refresh listener which triggers new data loading
 
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
