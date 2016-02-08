@@ -30,12 +30,15 @@ The following **bonus** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [ X ] Implemented View Holder pattern to optimize look up time
+* [ X ] Applied Butterknife annotation libraries for looking up views (rather than doing by findViewById)
 
 ## Open-source libraries used
 
 - [Android Async HTTP](https://github.com/loopj/android-async-http) - Simple asynchronous HTTP requests with JSON parsing
 - [Picasso](http://square.github.io/picasso/) - Image loading and caching library for Android
+- [Butterknife Annotation]  - http://jakewharton.github.io/butterknife/ - Field and method binding for Android Views
+- [Rounded Image Views] - https://github.com/vinc3m1/RoundedImageView - ImageView that supports rounded corners
 
 ## Video Walkthrough 
 
@@ -47,7 +50,9 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+- Most challenging part was the UI design - specifically in making smart choices between Linear and Relative layouts
+- Debugging became challenging when the debugger failed to launch properly. App just wont pause at breakpoints and made troubleshooting very hard and tedious. 
+
 
 ## License
 
