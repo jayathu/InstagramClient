@@ -34,7 +34,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvFullName"
-            android:text="Jayashree Nagarajan"
             android:textColor="#C2185B"
             android:layout_gravity="center_vertical"
             android:gravity="left"
@@ -109,38 +108,13 @@
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#C2185B"
-        android:id="@+id/tvCommentByUser"
-        android:text="user_name"
-        android:textStyle="bold"
-        android:textSize="12sp"
-        android:paddingTop="10dp"
-        />
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#BBBBBB"
-        android:textSize="12sp"
-        android:id="@+id/tvComment"/>
+        android:orientation="vertical"
+        android:id="@+id/list_comments">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#C2185B"
-        android:id="@+id/tvComment2ByUser"
-        android:text="user_name"
-        android:textStyle="bold"
-        android:textSize="12sp"
-        />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#BBBBBB"
-        android:textSize="12sp"
-        android:id="@+id/tv2Comment"/>
+    </LinearLayout>
 
 
 </LinearLayout>

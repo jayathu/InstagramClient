@@ -30,6 +30,8 @@ public class PhotosActivity extends AppCompatActivity {
 
     public static final String CLIENT_ID = "e05c462ebd86446ea48a5af73769b602";
 
+    public static final int MAX_COMMENT_COUNT = 2;
+
     private ArrayList<InstagramPhoto> photos;
     private InstagramPhotosAdapter aPhotos;
 
@@ -117,7 +119,10 @@ public class PhotosActivity extends AppCompatActivity {
 
                             try {
                                 comments = commentsJSON.getJSONArray("data");
-                                for (int j = 0; j < comments.length(); j++) {
+                                photo.commentsCount = comments.length();
+
+                                int totalCommentsToShow = Math.min(MAX_COMMENT_COUNT, comments.length());
+                                for (int j = 0; j < totalCommentsToShow; j++) {
 
                                     JSONObject commentJSON = comments.getJSONObject(j);
                                     InstagramComment comment = new InstagramComment();

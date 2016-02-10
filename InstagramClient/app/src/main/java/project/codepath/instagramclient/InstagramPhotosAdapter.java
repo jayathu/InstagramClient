@@ -7,10 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Comment;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -45,9 +50,6 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
             convertView.setTag(holder);
         }
         holder.ivProfilePhoto.setImageResource(0);
-
-
-
         holder.tvLikesCount.setText(photo.likesCount + " Likes");
         holder.tvCaption.setText(photo.caption);
         holder.tvFullname.setText(photo.fullName);
@@ -55,18 +57,27 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
 
         CharSequence val = DateUtils.getRelativeTimeSpanString(photo.created_time * 1000, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
         holder.tvPostedSince.setText(val);
+        if(photo.commentsCount > 0) {
+            holder.tvCommentsCount.setText(photo.commentsCount + " Comments");
+        }
 
-        if(photo.comments != null && photo.comments.size() > 1) {
+        LinearLayout list = (LinearLayout) convertView.findViewById(R.id.list_comments);
+        list.removeAllViews();
 
+        for(InstagramComment comment : photo.comments)
+        {
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.item_comments, null);
 
+            TextView tvCommentFullName = (TextView) view.findViewById(R.id.tv_comment_full_name);
+            TextView tvCommentDesc = (TextView) view.findViewById(R.id.tv_comment_desc);
+            ImageView ivCommentProfilePic = (ImageView)view.findViewById(R.id.iv_comment_profilePic);
 
-            holder.tvCommentedBy.setText(photo.comments.get(0).commentedBy);
-            holder.tvComment.setText(photo.comments.get(0).comment);
+            tvCommentFullName.setText(comment.commentedBy);
+            tvCommentDesc.setText(comment.comment);
 
-            holder.tvCommentsCount.setText(photo.comments.size() + " Comments");
+            Picasso.with(getContext()).load(comment.commenterProfilePicUrl).fit().centerInside().placeholder(R.drawable.icon).into(ivCommentProfilePic);
 
-            holder.tvCommented2By.setText(photo.comments.get(1).commentedBy);
-            holder.tvComment2.setText(photo.comments.get(1).comment);
+            list.addView(view);
 
         }
 
@@ -87,15 +98,13 @@ public class InstagramPhotosAdapter extends ArrayAdapter<InstagramPhoto> {
         @Bind(R.id.tvFullName) TextView tvFullname;
         @Bind(R.id.ivProfilePhoto)ImageView ivProfilePhoto;
         @Bind(R.id.tvPostedSince)TextView tvPostedSince;
-        @Bind(R.id.tvCommentByUser) TextView tvCommentedBy;
-        @Bind(R.id.tvComment)TextView tvComment;
         @Bind(R.id.tvCommentsCount)TextView tvCommentsCount;
-        @Bind(R.id.tvComment2ByUser)TextView tvCommented2By;
-        @Bind(R.id.tv2Comment)TextView tvComment2;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
+
+
 
     }
 
